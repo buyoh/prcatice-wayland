@@ -8,6 +8,9 @@
 // #include <memory>
 #include <bits/stdc++.h>
 
+// 以下のサイトを参考に作成。
+// https://devm33.hatenadiary.org/entry/20140422/1398182440
+
 //
 
 class WaylandClient {
@@ -171,25 +174,35 @@ void WaylandClient::initialize() {
     throw std::runtime_error("Cannot connect to Wayland display\n");
 
   // 2
+  // registry: compositorのオブジェクトを取得するためのもの？
   registry_ = wl_display_get_registry(display_);
   if (!registry_)
     throw std::runtime_error("Cannot get registry from Wayland display\n");
 
+  // RegistryListenerでオブジェクトを受け取る
   wl_registry_add_listener(registry_, registryListener_->getRegistryListener(),
                            registryListener_.get());
 
   // 3
-  wl_display_roundtrip(display_);
-  wl_display_dispatch(display_);
+  wl_display_roundtrip(display_);  // displayに溜まったeventをflushする
+  wl_display_dispatch(display_);   // requestが処理されるまでブロックする
 
   // 4
+  // compositorからsurfaceを取得する
   surface_ = wl_compositor_create_surface(compositor_);
+  // マウスカーソルやサイズ変更居等のアプリに
+  // 最低限必要なインターフェースを実装するものがshell
   shell_surface_ = wl_shell_get_shell_surface(shell_, surface_);
 
+  // TODO: 何故mmap？
+  // bnufferとdataを紐づける辺りもイメージ出来ていない
   createShmBuffer();
 
   // 5
   if (shell_surface_) {
+    // プログラムが応答可能かどうか、
+    // マウスカーソルが領域に入った時にpingが飛んでくるらしい
+    // 
     wl_shell_surface_add_listener(
         shell_surface_, shellSurfaceListener_->getShellSurfaceListener(),
         shellSurfaceListener_.get());
@@ -197,6 +210,7 @@ void WaylandClient::initialize() {
   }
 
   // 6
+  // なにこれ？
   wl_surface_set_user_data(surface_, this);
   wl_shell_surface_set_title(shell_surface_, "wayland-client");
 
@@ -204,8 +218,11 @@ void WaylandClient::initialize() {
   draw_argb8888(data_, 0x00, 0xf0, 0x80, 0x00, width_ * height_);
 
   // 8
+  // bufferをsurfaceの座標0,0に関連付ける
   wl_surface_attach(surface_, buffer_, 0, 0);
+  // 再描画範囲指定
   wl_surface_damage(surface_, 0, 0, width_, height_);
+  // 依頼
   wl_surface_commit(surface_);
 }
 
