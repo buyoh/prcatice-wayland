@@ -206,13 +206,7 @@ void WaylandClient::createShmBuffer() {
     exit(1);
   }
 
-  {
-    // tekitou
-    void* dummy = malloc(size);
-    write(fd, dummy, size);
-    free(dummy);
-  }
-
+  ftruncate(fd, size);
   data_ = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
   if (data_ == MAP_FAILED) {
     fprintf(stderr, "%s: mmap failed: %m\n", __FUNCTION__);
