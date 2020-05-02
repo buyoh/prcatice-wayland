@@ -1,0 +1,17 @@
+rule COM
+    command=g++ -std=c++17 -c -o $out $in
+
+rule LINK
+    command=g++ -std=c++17 -o $out $in -lwayland-client -lpthread
+
+build simple: phony out/simple
+build out/simple: LINK out/obj/simple.o
+build out/obj/simple.o: COM src/simple.cpp
+
+build mainapp: phony out/mainapp
+build out/mainapp: LINK out/obj/mainapp.o out/obj/wayland_client.o
+build out/obj/mainapp.o: COM src/mainapp.cpp
+
+build out/obj/wayland_client.o: COM src/wrapper/wayland_client.cpp
+
+default out/simple
