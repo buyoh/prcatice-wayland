@@ -4,7 +4,12 @@ playground
 
 ## build
 
-see `build.sh`
+```
+mkdir out
+cd out
+cmake -GNinja ..
+ninja
+```
 
 ## run (in x11 environment)
 

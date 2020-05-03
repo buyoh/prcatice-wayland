@@ -7,63 +7,7 @@
 #include <stdexcept>
 #include <string>
 
-// WaylandClient::RegistryListener
-// ============================================================================
-
-void WaylandClient::RegistryListener::handleGlobal(struct wl_registry* registry,
-                                                   uint32_t name,
-                                                   const char* interface,
-                                                   uint32_t version) {
-  printf("RegistryListener: global: interface=%s name=%0x version=%d\n",
-         interface, name, version);
-  if (strcmp(interface, "wl_compositor") == 0)
-    owner().compositor_ = static_cast<wl_compositor*>(
-        wl_registry_bind(registry, name, &wl_compositor_interface, 1));
-  else if (strcmp(interface, "wl_shell") == 0)
-    owner().shell_ = static_cast<wl_shell*>(
-        wl_registry_bind(registry, name, &wl_shell_interface, 1));
-  else if (strcmp(interface, "wl_shm") == 0)
-    owner().shm_ = static_cast<wl_shm*>(
-        wl_registry_bind(registry, name, &wl_shm_interface, 1));
-}
-
 //
-
-void WaylandClient::RegistryListener::handleGlobalRemove(wl_registry* registry,
-                                                         uint32_t name) {
-  printf("RegistryListener: global_remove: name=%0x\n", name);
-}
-
-// WaylandClient::ShellSurfaceListener
-// ============================================================================
-
-void WaylandClient::ShellSurfaceListener::handlePing(
-    wl_shell_surface* shell_surface,
-    uint32_t serial) {
-  printf("ShellSurfaceListener: ping: serial=%d\n", serial);
-  wl_shell_surface_pong(shell_surface, serial);
-}
-
-//
-
-void WaylandClient::ShellSurfaceListener::handleConfigure(
-    wl_shell_surface* shell_surface,
-    uint32_t edges,
-    int32_t width,
-    int32_t height) {
-  printf("ShellSurfaceListener: configure: edges=%0x, width=%d, height=%d\n",
-         edges, width, height);
-}
-
-//
-
-void WaylandClient::ShellSurfaceListener::handlePopupDone(
-    wl_shell_surface* shell_surface) {
-  printf("ShellSurfaceListener: popup_done: \n");
-}
-
-// WaylandClient
-// ============================================================================
 
 WaylandClient::~WaylandClient() {
   // ????
@@ -140,9 +84,11 @@ void WaylandClient::createShmBuffer() {
 //
 
 void WaylandClient::initialize() {
-  registryListener_ = std::make_unique<WaylandClient::RegistryListener>(this);
-  shellSurfaceListener_ =
-      std::make_unique<WaylandClient::ShellSurfaceListener>(this);
+  registryListener_ = std::make_unique<RegistryListener>(this);
+  shellSurfaceListener_ = std::make_unique<ShellSurfaceListener>(this);
+  keyboardListener_ = std::make_unique<KeyboardListener>(this);
+  pointerListener_ = std::make_unique<PointerListener>(this);
+  touchListener_ = std::make_unique<TouchListener>(this);
 
   // 1
   display_ = wl_display_connect(nullptr);
@@ -182,6 +128,10 @@ void WaylandClient::initialize() {
         shellSurfaceListener_.get());
     wl_shell_surface_set_toplevel(shell_surface_);
   }
+
+  // 5.1
+  // TODO:
+  // wl_seat_add_listener(seat_, seatListener->)
 
   // 6
   // なにこれ？
