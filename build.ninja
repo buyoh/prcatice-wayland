@@ -14,4 +14,4 @@ build out/obj/mainapp.o: COM src/mainapp.cpp
 
 build out/obj/wayland_client.o: COM src/wrapper/wayland_client.cpp
 
-default out/simple
+default simple mainapp

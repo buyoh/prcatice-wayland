@@ -90,16 +90,17 @@ WaylandClient::~WaylandClient() {
 static const char* getShmFilepath() {
   static std::string buffer;
   if (buffer.empty()) {
-    char* xdg = getenv("XDG_RUNTIME_DIR");
-    if (xdg) {
-      buffer += xdg;
-      buffer += "/wayland_client_shm.tmp";
-    } else {
-      std::clog << "environment variable XDG_RUNTIME_DIR is undefined. \n"
-                   "use '/tmp/wayland_client_shm.tmp'."
-                << std::endl;
-      buffer = "/tmp/wayland_client_shm.tmp";
-    }
+    // char* xdg = getenv("XDG_RUNTIME_DIR");
+    // if (xdg) {
+    //   buffer += xdg;
+    //   buffer += "/wayland_client_shm.tmp";
+    // } else {
+    //   std::clog << "environment variable XDG_RUNTIME_DIR is undefined. \n"
+    //                "use '/tmp/wayland_client_shm.tmp'."
+    //             << std::endl;
+    //   buffer = "/tmp/wayland_client_shm.tmp";
+    // }
+    buffer = "/tmp/wayland_client_shm.tmp";
   }
   return buffer.c_str();
 }
@@ -108,7 +109,9 @@ void WaylandClient::createShmBuffer() {
   const int stride = width_ * 4;
   const int size = stride * height_;
 
-  int fd = open(getShmFilepath(), O_RDWR | O_EXCL | O_CREAT, 0600);
+  const char* shmFilepath = getShmFilepath();
+  remove(shmFilepath);  // dangerous
+  int fd = open(shmFilepath, O_RDWR | O_EXCL | O_CREAT, 0600);
   if (fd == -1) {
     perror("createShmBuffer: open failed");
     exit(1);
