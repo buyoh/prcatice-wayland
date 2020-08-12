@@ -7,6 +7,8 @@
 #include <stdexcept>
 #include <string>
 
+#include "./util/log.h"
+
 //
 
 WaylandClient::~WaylandClient() {
@@ -102,12 +104,15 @@ void WaylandClient::initialize() {
     throw std::runtime_error("Cannot get registry from Wayland display\n");
 
   // RegistryListenerでオブジェクトを受け取る
-  wl_registry_add_listener(registry_, registryListener_->getRegistryListener(),
+  wl_registry_add_listener(registry_, RegistryListener::registryListener(),
                            registryListener_.get());
 
   // 3
-  wl_display_roundtrip(display_);  // displayに溜まったeventをflushする
-  wl_display_dispatch(display_);  // requestが処理されるまでブロックする
+  // displayに溜まったeventをflushする
+  // この辺りで、registryLisnerが値を受け取り変数に格納する
+  wl_display_roundtrip(display_);
+  // requestが処理されるまでブロックする
+  wl_display_dispatch(display_);
 
   // 4
   // compositorからsurfaceを取得する
@@ -128,10 +133,6 @@ void WaylandClient::initialize() {
         shellSurfaceListener_.get());
     wl_shell_surface_set_toplevel(shell_surface_);
   }
-
-  // 5.1
-  // TODO:
-  // wl_seat_add_listener(seat_, seatListener->)
 
   // 6
   // なにこれ？

@@ -4,8 +4,6 @@
 #include "./wayland_client.hpp"
 
 class WaylandClient::TouchListener : public Accessor {
-  wl_touch_listener touchListener_;
-
   void handleDown(wl_touch* wl_touch,
                   uint32_t serial,
                   uint32_t time,
@@ -76,13 +74,18 @@ class WaylandClient::TouchListener : public Accessor {
                                                          orientation);
   }
 
- public:
-  wl_touch_listener* getShellSurfaceListener() { return &touchListener_; }
+  static const wl_touch_listener touchListener_;
 
-  TouchListener(WaylandClient* wc)
-      : Accessor(wc),
-        touchListener_({recieveDown, recieveUp, recieveMotion, recieveFrame,
-                        recieveCancel, recieveShape, recieveOrientation}) {}
+ public:
+  static const wl_touch_listener* getShellSurfaceListener() {
+    return &touchListener_;
+  }
+
+  TouchListener(WaylandClient* wc) : Accessor(wc) {}
 };
+
+const wl_touch_listener WaylandClient::TouchListener::touchListener_{
+    recieveDown,   recieveUp,    recieveMotion,     recieveFrame,
+    recieveCancel, recieveShape, recieveOrientation};
 
 #endif  // SRC_WRAPPER_TOUCH_LISTENER_HPP__

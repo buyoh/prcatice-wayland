@@ -1,10 +1,10 @@
-#include "./wrapper/wayland_client.hpp"
-
 #include <bits/stdc++.h>
+
+#include "./wrapper/wayland_client.hpp"
 using namespace std;
 
 WaylandClient waylandClient(256, 256);
-atomic_bool running = false;
+atomic_bool running{false};
 
 void handleTrap(int sig) {
   running = false;
@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
   thread renderThread(render_main, waylandClient.data());
 
   while (waylandClient.displayDispatch() != -1) {
-    cout << "loop" << endl;
+    // cout << "loop" << endl;
   }
   renderThread.join();
 

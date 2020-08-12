@@ -4,8 +4,6 @@
 #include "./wayland_client.hpp"
 
 class WaylandClient::ShellSurfaceListener : public Accessor {
-  wl_shell_surface_listener shellSurfaceListener_;
-
   void handlePing(wl_shell_surface* shell_surface, uint32_t serial);
   void handleConfigure(wl_shell_surface* shell_surface,
                        uint32_t edges,
@@ -30,15 +28,18 @@ class WaylandClient::ShellSurfaceListener : public Accessor {
     static_cast<ShellSurfaceListener*>(data)->handlePopupDone(shell_surface);
   }
 
+  static const wl_shell_surface_listener shellSurfaceListener_;
+
  public:
-  wl_shell_surface_listener* getShellSurfaceListener() {
+  const wl_shell_surface_listener* shellSurfaceListener() {
     return &shellSurfaceListener_;
   }
 
-  ShellSurfaceListener(WaylandClient* wc)
-      : Accessor(wc),
-        shellSurfaceListener_(
-            {recievePing, recieveConfigure, recievePopupDone}) {}
+  ShellSurfaceListener(WaylandClient* wc) : Accessor(wc) {}
 };
+
+const wl_shell_surface_listener
+    WaylandClient::ShellSurfaceListener::shellSurfaceListener_{
+        recievePing, recieveConfigure, recievePopupDone};
 
 #endif  // SRC_WRAPPER_SHELL_SURFACE_LISTENER_HPP__

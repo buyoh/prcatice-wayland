@@ -4,8 +4,6 @@
 #include "./wayland_client.hpp"
 
 class WaylandClient::KeyboardListener : public Accessor {
-  wl_keyboard_listener shellSurfaceListener_;
-
   void handleKeymap(wl_keyboard* keyboard,
                     uint32_t format,
                     int32_t fd,
@@ -78,14 +76,19 @@ class WaylandClient::KeyboardListener : public Accessor {
                                                            delay);
   }
 
- public:
-  wl_keyboard_listener* getKeyboardListener() { return &shellSurfaceListener_; }
+  static const wl_keyboard_listener shellSurfaceListener_;
 
-  KeyboardListener(WaylandClient* wc)
-      : Accessor(wc),
-        shellSurfaceListener_({recieveKeymap, recieveEnter, recieveLeave,
-                               recieveKey, recieveModifiers,
-                               recieveRepeatInfo}) {}
+ public:
+  static const wl_keyboard_listener* keyboardListener() {
+    return &shellSurfaceListener_;
+  }
+
+  KeyboardListener(WaylandClient* wc) : Accessor(wc) {}
 };
+
+const wl_keyboard_listener
+    WaylandClient::KeyboardListener::shellSurfaceListener_{
+        recieveKeymap, recieveEnter,     recieveLeave,
+        recieveKey,    recieveModifiers, recieveRepeatInfo};
 
 #endif  // SRC_WRAPPER_KEYBOARD_LISTENER_HPP__

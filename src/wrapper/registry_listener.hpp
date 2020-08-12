@@ -4,8 +4,6 @@
 #include "./wayland_client.hpp"
 
 class WaylandClient::RegistryListener : public Accessor {
-  wl_registry_listener registryListener_;
-
   void handleGlobal(wl_registry* registry,
                     uint32_t name,
                     const char* interface,
@@ -26,11 +24,17 @@ class WaylandClient::RegistryListener : public Accessor {
     static_cast<RegistryListener*>(data)->handleGlobalRemove(registry, name);
   }
 
- public:
-  wl_registry_listener* getRegistryListener() { return &registryListener_; }
+  static const wl_registry_listener registryListener_;
 
-  RegistryListener(WaylandClient* wc)
-      : Accessor(wc), registryListener_({recieveGlobal, recieveGlobalRemove}) {}
+ public:
+  static const wl_registry_listener* registryListener() {
+    return &registryListener_;
+  }
+
+  RegistryListener(WaylandClient* wc) : Accessor(wc) {}
 };
+
+const wl_registry_listener WaylandClient::RegistryListener::registryListener_{
+    recieveGlobal, recieveGlobalRemove};
 
 #endif  // SRC_WRAPPER_REGISTRY_LISTENER_HPP__

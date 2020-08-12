@@ -4,8 +4,6 @@
 #include "wayland_client.hpp"
 
 class WaylandClient::PointerListener : public Accessor {
-  wl_pointer_listener pointerListener_;
-
   void handleEnter(wl_pointer* wl_pointer,
                    uint32_t serial,
                    wl_surface* surface,
@@ -98,15 +96,19 @@ class WaylandClient::PointerListener : public Accessor {
                                                             discrete);
   }
 
- public:
-  wl_pointer_listener* getShellSurfaceListener() { return &pointerListener_; }
+  static const wl_pointer_listener pointerListener_;
 
-  PointerListener(WaylandClient* wc)
-      : Accessor(wc),
-        pointerListener_({recieveEnter, recieveLeave, recieveMotion,
-                          recieveButton, recieveAxis, recieveFrame,
-                          recieveAxisSource, recieveAxisStop,
-                          recieveAxisDiscrete}) {}
+ public:
+  static const wl_pointer_listener* getShellSurfaceListener() {
+    return &pointerListener_;
+  }
+
+  PointerListener(WaylandClient* wc) : Accessor(wc), pointerListener_() {}
 };
+
+const WaylandClient::PointerListener::pointerListener_{
+    recieveEnter,      recieveLeave,    recieveMotion,
+    recieveButton,     recieveAxis,     recieveFrame,
+    recieveAxisSource, recieveAxisStop, recieveAxisDiscrete};
 
 #endif  // SRC_WRAPPER_POINTER_LISTENER_HPP__
