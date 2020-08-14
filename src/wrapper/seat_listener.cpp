@@ -14,3 +14,6 @@ void WaylandClient::SeatListener::handleSeatName(wl_seat* seat,
   VLOG << "seatname: " << name;
   return;
 }
+
+const wl_seat_listener WaylandClient::SeatListener::registryListener_{
+    recieveSeatCapabilities, recieveSeatName};

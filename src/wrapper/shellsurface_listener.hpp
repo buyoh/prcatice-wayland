@@ -31,15 +31,11 @@ class WaylandClient::ShellSurfaceListener : public Accessor {
   static const wl_shell_surface_listener shellSurfaceListener_;
 
  public:
-  const wl_shell_surface_listener* shellSurfaceListener() {
+  static const wl_shell_surface_listener* shellSurfaceListener() {
     return &shellSurfaceListener_;
   }
 
   ShellSurfaceListener(WaylandClient* wc) : Accessor(wc) {}
 };
-
-const wl_shell_surface_listener
-    WaylandClient::ShellSurfaceListener::shellSurfaceListener_{
-        recievePing, recieveConfigure, recievePopupDone};
 
 #endif  // SRC_WRAPPER_SHELL_SURFACE_LISTENER_HPP__

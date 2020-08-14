@@ -20,14 +20,9 @@ class WaylandClient::SeatListener : public Accessor {
   static const wl_seat_listener registryListener_;
 
  public:
-  static const wl_seat_listener* getSeatListener() {
-    return &registryListener_;
-  }
+  static const wl_seat_listener* seatListener() { return &registryListener_; }
 
   SeatListener(WaylandClient* wc) : Accessor(wc) {}
 };
-
-const wl_seat_listener WaylandClient::SeatListener::registryListener_{
-    recieveSeatCapabilities, recieveSeatName};
 
 #endif  // SRC_WRAPPER_SEAT_LISTENER_HPP__

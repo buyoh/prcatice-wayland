@@ -99,6 +99,7 @@ class WaylandClient {
 #include "./keyboard_listener.hpp"
 #include "./pointer_listener.hpp"
 #include "./registry_listener.hpp"
+#include "./seat_listener.hpp"
 #include "./shellsurface_listener.hpp"
 #include "./touch_listener.hpp"
 

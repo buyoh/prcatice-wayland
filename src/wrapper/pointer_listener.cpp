@@ -58,3 +58,8 @@ void WaylandClient::PointerListener::handleAxisDiscrete(wl_pointer* wl_pointer,
                                                         int32_t discrete) {
   VLOG;
 }
+
+const wl_pointer_listener WaylandClient::PointerListener::pointerListener_{
+    recieveEnter,      recieveLeave,    recieveMotion,
+    recieveButton,     recieveAxis,     recieveFrame,
+    recieveAxisSource, recieveAxisStop, recieveAxisDiscrete};

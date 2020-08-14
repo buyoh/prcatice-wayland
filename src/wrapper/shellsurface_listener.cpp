@@ -28,3 +28,7 @@ void WaylandClient::ShellSurfaceListener::handlePopupDone(
     wl_shell_surface* shell_surface) {
   VLOG << "popup_done: ";
 }
+
+const wl_shell_surface_listener
+    WaylandClient::ShellSurfaceListener::shellSurfaceListener_{
+        recievePing, recieveConfigure, recievePopupDone};

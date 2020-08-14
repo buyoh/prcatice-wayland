@@ -44,3 +44,8 @@ void WaylandClient::KeyboardListener::handleRepeatInfo(wl_keyboard* keyboard,
                                                        int32_t delay) {
   VLOG;
 }
+
+const wl_keyboard_listener
+    WaylandClient::KeyboardListener::shellSurfaceListener_{
+        recieveKeymap, recieveEnter,     recieveLeave,
+        recieveKey,    recieveModifiers, recieveRepeatInfo};

@@ -91,6 +91,7 @@ void WaylandClient::initialize() {
   keyboardListener_ = std::make_unique<KeyboardListener>(this);
   pointerListener_ = std::make_unique<PointerListener>(this);
   touchListener_ = std::make_unique<TouchListener>(this);
+  seatListener_ = std::make_unique<SeatListener>(this);
 
   // 1
   display_ = wl_display_connect(nullptr);
@@ -128,9 +129,9 @@ void WaylandClient::initialize() {
     // プログラムが応答可能かどうか、
     // マウスカーソルが領域に入った時にpingが飛んでくるらしい
     //
-    wl_shell_surface_add_listener(
-        shell_surface_, shellSurfaceListener_->getShellSurfaceListener(),
-        shellSurfaceListener_.get());
+    wl_shell_surface_add_listener(shell_surface_,
+                                  ShellSurfaceListener::shellSurfaceListener(),
+                                  shellSurfaceListener_.get());
     wl_shell_surface_set_toplevel(shell_surface_);
   }
 

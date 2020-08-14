@@ -18,5 +18,6 @@ add_executable(mainapp
     src/wrapper/registry_listener.cpp
     src/wrapper/shellsurface_listener.cpp
     src/wrapper/touch_listener.cpp
+    src/wrapper/seat_listener.cpp
     )
 target_link_libraries(mainapp wayland-client pthread)

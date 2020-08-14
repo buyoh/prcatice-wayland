@@ -47,3 +47,7 @@ void WaylandClient::TouchListener ::handleOrientation(wl_touch* wl_touch,
                                                       wl_fixed_t orientation) {
   VLOG;
 }
+
+const wl_touch_listener WaylandClient::TouchListener::touchListener_{
+    recieveDown,   recieveUp,    recieveMotion,     recieveFrame,
+    recieveCancel, recieveShape, recieveOrientation};

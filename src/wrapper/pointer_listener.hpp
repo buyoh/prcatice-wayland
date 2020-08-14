@@ -99,16 +99,11 @@ class WaylandClient::PointerListener : public Accessor {
   static const wl_pointer_listener pointerListener_;
 
  public:
-  static const wl_pointer_listener* getShellSurfaceListener() {
+  static const wl_pointer_listener* shellSurfaceListener() {
     return &pointerListener_;
   }
 
-  PointerListener(WaylandClient* wc) : Accessor(wc), pointerListener_() {}
+  PointerListener(WaylandClient* wc) : Accessor(wc) {}
 };
-
-const WaylandClient::PointerListener::pointerListener_{
-    recieveEnter,      recieveLeave,    recieveMotion,
-    recieveButton,     recieveAxis,     recieveFrame,
-    recieveAxisSource, recieveAxisStop, recieveAxisDiscrete};
 
 #endif  // SRC_WRAPPER_POINTER_LISTENER_HPP__

@@ -86,9 +86,4 @@ class WaylandClient::KeyboardListener : public Accessor {
   KeyboardListener(WaylandClient* wc) : Accessor(wc) {}
 };
 
-const wl_keyboard_listener
-    WaylandClient::KeyboardListener::shellSurfaceListener_{
-        recieveKeymap, recieveEnter,     recieveLeave,
-        recieveKey,    recieveModifiers, recieveRepeatInfo};
-
 #endif  // SRC_WRAPPER_KEYBOARD_LISTENER_HPP__

@@ -30,8 +30,7 @@ void WaylandClient::RegistryListener::handleGlobal(struct wl_registry* registry,
     owner().seat_ = static_cast<wl_seat*>(
         wl_registry_bind(registry, name, &wl_seat_interface, useVersion));
     // 受け取った直後で addlistenerしないと手遅れらしい
-    wl_seat_add_listener(owner().seat_,
-                         owner().seatListener_->getSeatListener(),
+    wl_seat_add_listener(owner().seat_, SeatListener::seatListener(),
                          owner().seatListener_.get());
 
     // TODO: keep the useVersion for destructing wl_seat
@@ -46,3 +45,6 @@ void WaylandClient::RegistryListener::handleGlobalRemove(wl_registry* registry,
   VLOG << "global_remove: name=" << name;
   printf("RegistryListener: global_remove: name=%0x\n", name);
 }
+
+const wl_registry_listener WaylandClient::RegistryListener::registryListener_{
+    recieveGlobal, recieveGlobalRemove};

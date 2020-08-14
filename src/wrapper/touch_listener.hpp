@@ -77,15 +77,11 @@ class WaylandClient::TouchListener : public Accessor {
   static const wl_touch_listener touchListener_;
 
  public:
-  static const wl_touch_listener* getShellSurfaceListener() {
+  static const wl_touch_listener* shellSurfaceListener() {
     return &touchListener_;
   }
 
   TouchListener(WaylandClient* wc) : Accessor(wc) {}
 };
-
-const wl_touch_listener WaylandClient::TouchListener::touchListener_{
-    recieveDown,   recieveUp,    recieveMotion,     recieveFrame,
-    recieveCancel, recieveShape, recieveOrientation};
 
 #endif  // SRC_WRAPPER_TOUCH_LISTENER_HPP__

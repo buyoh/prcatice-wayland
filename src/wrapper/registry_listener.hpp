@@ -34,7 +34,4 @@ class WaylandClient::RegistryListener : public Accessor {
   RegistryListener(WaylandClient* wc) : Accessor(wc) {}
 };
 
-const wl_registry_listener WaylandClient::RegistryListener::registryListener_{
-    recieveGlobal, recieveGlobalRemove};
-
 #endif  // SRC_WRAPPER_REGISTRY_LISTENER_HPP__
