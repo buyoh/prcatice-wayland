@@ -3,21 +3,8 @@
 #include <algorithm>
 #include <cstring>
 
+#include "./seat_listener.hpp"
 #include "./util/log.h"
-
-static void handleSeatCapabilities(void* data,
-                                   wl_seat* seat,
-                                   uint32_t capabilities) {
-  // wl_keyboard_add_listener
-  VLOG << "handleSeatCapabilities: ";
-}
-
-static void handleSeatName(void* data, wl_seat* seat, const char* name) {
-  VLOG << "seatname: " << name;
-}
-
-const static struct wl_seat_listener seat_listner = {handleSeatCapabilities,
-                                                     handleSeatName};
 
 //
 
@@ -43,7 +30,9 @@ void WaylandClient::RegistryListener::handleGlobal(struct wl_registry* registry,
     owner().seat_ = static_cast<wl_seat*>(
         wl_registry_bind(registry, name, &wl_seat_interface, useVersion));
     // 受け取った直後で addlistenerしないと手遅れらしい
-    wl_seat_add_listener(owner().seat_, &seat_listner, &owner());
+    wl_seat_add_listener(owner().seat_,
+                         owner().seatListener_->getSeatListener(),
+                         owner().seatListener_.get());
 
     // TODO: keep the useVersion for destructing wl_seat
     // https://aznote.jakou.com/prog/wayland/07.html

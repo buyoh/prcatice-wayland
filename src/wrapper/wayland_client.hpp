@@ -69,12 +69,13 @@ class WaylandClient {
   // and up to one "pointer" device (i.e. a mouse or touchpad)
   wl_seat* seat_;
   // 多重継承(WaylandClientがこれらを継承)の方が良いかも…
-  // しかしメンバへの参照が課題となる
+  // しかしListenerからClientのメンバへの参照がうまくできない
   std::unique_ptr<RegistryListener> registryListener_;
   std::unique_ptr<ShellSurfaceListener> shellSurfaceListener_;
   std::unique_ptr<KeyboardListener> keyboardListener_;
   std::unique_ptr<PointerListener> pointerListener_;
   std::unique_ptr<TouchListener> touchListener_;
+  std::unique_ptr<SeatListener> seatListener_;
   uint32_t* data_;  // for shm buffer
   int width_, height_;
 
