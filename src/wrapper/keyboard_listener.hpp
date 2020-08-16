@@ -1,6 +1,8 @@
 #ifndef SRC_WRAPPER_KEYBOARD_LISTENER_HPP__
 #define SRC_WRAPPER_KEYBOARD_LISTENER_HPP__
 
+#include <xkbcommon/xkbcommon.h>
+
 #include "./wayland_client.hpp"
 
 class WaylandClient::KeyboardListener : public Accessor {
@@ -77,6 +79,10 @@ class WaylandClient::KeyboardListener : public Accessor {
   }
 
   static const wl_keyboard_listener shellSurfaceListener_;
+
+  xkb_context* xkb_context_ = nullptr;
+  xkb_state* xkb_state_ = nullptr;
+  xkb_keymap* xkb_keymap_ = nullptr;
 
  public:
   static const wl_keyboard_listener* keyboardListener() {

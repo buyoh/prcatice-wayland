@@ -20,4 +20,4 @@ add_executable(mainapp
     src/wrapper/touch_listener.cpp
     src/wrapper/seat_listener.cpp
     )
-target_link_libraries(mainapp wayland-client pthread)
+target_link_libraries(mainapp wayland-client pthread xkbcommon)
