@@ -7,7 +7,7 @@ set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(simple src/simple.cpp)
+add_executable(simple simple/simple.cpp)
 target_link_libraries(simple wayland-client pthread)
 
 add_executable(mainapp
