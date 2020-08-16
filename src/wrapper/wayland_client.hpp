@@ -62,6 +62,10 @@ class WaylandClient {
   wl_shell* shell_;
   //
   wl_shell_surface* shell_surface_;
+  // pointer
+  wl_pointer* pointer_;
+  // keyboard
+  wl_keyboard* keyboard_;
   // 入出力を触るもの
   // https://wayland-book.com/seat.html
   // In philosophical terms, a Wayland seat refers to one "seat" at which a user

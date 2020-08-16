@@ -39,6 +39,10 @@ void WaylandClient::PointerListener::handleAxis(wl_pointer* wl_pointer,
 }
 
 void WaylandClient::PointerListener::handleFrame(wl_pointer* wl_pointer) {
+  // NOTE:
+  // 他のハンドラで情報を受け取りどこかに退避してから、
+  // このハンドラでログを出したり反映したりするらしい
+  // wl_pointer_listenerの定義元を参照。
   VLOG;
 }
 

@@ -99,7 +99,7 @@ class WaylandClient::PointerListener : public Accessor {
   static const wl_pointer_listener pointerListener_;
 
  public:
-  static const wl_pointer_listener* shellSurfaceListener() {
+  static const wl_pointer_listener* pointerListener() {
     return &pointerListener_;
   }
 
